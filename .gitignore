@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# Test/working image copies — never commit photos
+*.CR2
+*.cr2
+*.dr4
+*.vrd
+*.dpp4copy*
+*.tif
+*.tiff
+*.jpg
+*.jpeg
+
+# Editor/OS cruft
+.DS_Store
+
+# Local agent/session state
+.claude/
+.omc/
+.remember/
