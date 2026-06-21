@@ -3,6 +3,15 @@
 dpp3-dpp4-bridge  (dpp3_dpp4_bridge.py)
 Migrate Canon DPP3 recipes into DPP4-readable recipes.
 
+UNOFFICIAL
+----------
+This is an independent, community-made tool. It is NOT a Canon product and is
+NOT affiliated with, endorsed by, or supported by Canon in any way. "Canon",
+"DPP", and "Digital Photo Professional" are trademarks of Canon Inc., used here
+only for identification. It writes into Canon's undocumented CanonVRD recipe
+data, which is reverse-engineered and may change or misbehave. PROVIDED AS-IS,
+WITH NO WARRANTY -- use entirely at your own risk, on backups/copies only.
+
 Credit
 ------
 The entire mechanism this tool automates was reverse-engineered by forum user

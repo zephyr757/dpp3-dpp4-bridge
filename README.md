@@ -3,9 +3,18 @@
 Migrate Canon **Digital Photo Professional 3** edit recipes into a form
 **DPP4** can read — recovering years of DPP3 edits that DPP4 otherwise ignores.
 
-> ⚠️ Always run against **throw-away copies**, never your originals.
-> This recovers your edit *intent*; it is not a pixel-perfect match (DPP4's
-> render engine differs from DPP3's). See [limitations](#limitations).
+> ## ⚠️ UNOFFICIAL — not affiliated with, endorsed, or supported by Canon
+> This is an independent, community-made tool. It is **not** a Canon product and
+> Canon provides **no** support for it. "Canon", "DPP", and "Digital Photo
+> Professional" are trademarks of Canon Inc., used here only for identification.
+> The tool works by writing into Canon's undocumented `CanonVRD` recipe data;
+> that format is reverse-engineered and may change or behave unexpectedly.
+>
+> **Provided AS-IS, with no warranty of any kind. Use entirely at your own
+> risk.** Always run against **throw-away copies**, never your originals.
+> Back up your files first. This recovers your edit *intent*; it is not a
+> pixel-perfect match (DPP4's render engine differs from DPP3's).
+> See [limitations](#limitations) and the [LICENSE](LICENSE).
 
 ## Why this exists
 
