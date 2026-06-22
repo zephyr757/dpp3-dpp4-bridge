@@ -15,6 +15,12 @@ Migrate Canon **Digital Photo Professional 3** edit recipes into a form
 > Back up your files first. This recovers your edit *intent*; it is not a
 > pixel-perfect match (DPP4's render engine differs from DPP3's).
 > See [limitations](#limitations) and the [LICENSE](LICENSE).
+>
+> **Experimental / non-production tool.** This is research-grade recovery
+> tooling for personal archives and calibration experiments. Do **not** use it
+> as a production workflow, do not run it unattended on irreplaceable files, and
+> do not treat its output as authoritative until you have verified each setting
+> in DPP4.
 
 ## Why this exists
 
@@ -70,9 +76,12 @@ python3 dpp3_dpp4_bridge.py calibrate --dpp3 cal_dpp3.CR2 --dpp4 cal_dpp4.CR2
 
 - Scalar settings: brightness (verified 1:1), white balance, color temp,
   picture style, contrast, saturation, hue, sharpness, luminance/chroma NR.
-- **Crop** — assembled into DPP4's `CropInfo` struct.
-- **Tone curve** — experimental, behind `--enable-tonecurve`; calibrate the
-  point encoding before trusting it.
+- **Crop** — detected and reported, but not written yet. DPP4 stores this in a
+  nested `CropInfo` table; ExifTool exposes the child fields as writable, but
+  direct `CropInfo={...}` writes are not accepted in ExifTool 13.55.
+- **Tone curve** — detected when `--enable-tonecurve` is used, but not written
+  yet. Like crop, DPP4 stores it in a nested table and needs a verified write
+  strategy before it is safe to batch-run.
 
 ## Limitations
 
@@ -80,8 +89,9 @@ python3 dpp3_dpp4_bridge.py calibrate --dpp3 cal_dpp3.CR2 --dpp4 cal_dpp4.CR2
    perfect value copy won't look pixel-identical. This restores edit intent.
 2. **Value encodings need calibration** on your machine (the `calibrate`
    command makes this mechanical).
-3. **Structs** (crop, tone curve) are the least-certain paths — verify them
-   against a known calibration image before batch-running.
+3. **Structs** (crop, tone curve) are not migrated yet. They need a verified
+   ExifTool write strategy against real DPP4-bearing CR2/DR4 files before
+   they are safe to batch-run.
 
 If you want the *exact* old look with zero risk, the alternative is to batch
 export from DPP3 to 16-bit TIFF (baking edits into pixels), then import the
@@ -99,7 +109,7 @@ project finishes what andre-7d started: the tag map plus the value-conversion
 calibration he never automated.
 
 Tag definitions come from Phil Harvey's
-[exiftool CanonVRD tables](https://exiftool.org/TagNames/CanonVRD.html).
+[exiftool CanonVRD tables](https://exiftool.sourceforge.net/TagNames/CanonVRD.html).
 
 ## License
 

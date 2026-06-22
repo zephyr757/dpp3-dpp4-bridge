@@ -10,6 +10,10 @@ that, `convert` runs across your whole library unattended.
 > ⚠️ Work on THROW-AWAY COPIES only. Never your originals.
 > Requires: `brew install exiftool`, and both DPP3 + DPP4 installed.
 
+> This is experimental, non-production recovery tooling. Use it only for
+> calibrated personal-archive recovery on backed-up copies, and verify the
+> resulting files in DPP4 before trusting them.
+
 ---
 
 ## The method (why it works)
@@ -92,11 +96,13 @@ WB_MODE = {"Auto": 0, "Daylight": 4, "Cloudy": 5, "Tungsten": 3, "Shade": 6}
 
 ### Crop struct
 
-Confirm the pixel coords are 1:1 (`CropX` should equal your DPP3 `684`). If so,
-the built-in `build_crop_arg` already works. If DPP4 stores a different origin
-convention (e.g. measured from a rotated frame), note the offset and adjust
-`CROP_DPP3` field handling. Watch `CropRotation`/`CropAngle` — leave them at the
-defaults (0) unless you actually rotated.
+Confirm the pixel coords are 1:1 (`CropX` should equal your DPP3 `684`), but do
+not batch-write crop yet. DPP4 stores crop in a nested `CropInfo` table:
+`CropX`, `CropY`, `CropWidth`, `CropHeight`, `CropRotation`, and friends are
+writable child fields, while the top-level `CropInfo` container is not a direct
+assignment target in ExifTool 13.55. The converter reports crop and skips it
+until we verify the correct child-field write syntax against a real DPP4-bearing
+CR2/DR4 calibration file.
 
 ### Tone curve (do last; it's the fiddly one)
 
@@ -108,9 +114,10 @@ exiftool -CanonVRD:ToneCurve cal_dpp4.CR2
 ```
 
 Figure out: how many points DPP4 keeps, whether values are 0–255 or 0–4095,
-and the field order inside the `ToneCurve` struct. Update `build_tonecurve_arg`,
-then enable it per-run with `--enable-tonecurve`. Until you've done this, leave
-tone curves off — a wrong curve is worse than none.
+and the field order inside the `ToneCurve` struct. Do not batch-write tone
+curves yet. Like crop, DPP4 stores tone curves in a nested table; the converter
+reports them with `--enable-tonecurve` and skips the write until the child-field
+write syntax is verified. A wrong curve is worse than none.
 
 ---
 
